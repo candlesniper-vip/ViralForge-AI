@@ -1,0 +1,133 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "A user of the platform",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "currentTeamId": { "type": "string" },
+        "createdAt": { "type": "string", "description": "Timestamp of creation." },
+        "updatedAt": { "type": "string", "description": "Timestamp of update." }
+      },
+      "required": ["email", "createdAt", "updatedAt"]
+    },
+    "Team": {
+      "title": "Team",
+      "description": "Workspace/Team for collaborative management",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "plan": { "type": "string" },
+        "stripeCustomerId": { "type": "string" },
+        "stripeSubscriptionId": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["name", "ownerId", "plan", "createdAt", "updatedAt"]
+    },
+    "TeamMember": {
+      "title": "Team Member",
+      "description": "User association to a team and their role",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "role": { "type": "string" },
+        "joinedAt": { "type": "string" }
+      },
+      "required": ["userId", "role", "joinedAt"]
+    },
+    "SocialAccount": {
+      "title": "Social Account",
+      "description": "Connected social media channels (OAuth)",
+      "type": "object",
+      "properties": {
+        "platformUserId": { "type": "string" },
+        "platform": { "type": "string" },
+        "username": { "type": "string" },
+        "accessToken": { "type": "string" },
+        "refreshToken": { "type": "string" },
+        "expiresAt": { "type": "number" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["platform", "username", "createdAt", "updatedAt"]
+    },
+    "Post": {
+      "title": "Social Media Post",
+      "description": "A piece of content created for social media",
+      "type": "object",
+      "properties": {
+        "content": { "type": "string" },
+        "platforms": { "type": "array", "items": { "type": "string" } },
+        "status": { "type": "string", "enum": ["draft", "scheduled", "published", "failed"] },
+        "scheduledAt": { "type": "string" },
+        "mediaUrls": { "type": "array", "items": { "type": "string" } },
+        "aiScore": { "type": "number" },
+        "authorId": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["content", "status", "authorId", "createdAt", "updatedAt"]
+    },
+    "MediaFile": {
+      "title": "Media File",
+      "description": "Stored image or video asset",
+      "type": "object",
+      "properties": {
+        "url": { "type": "string" },
+        "type": { "type": "string", "enum": ["image", "video"] },
+        "size": { "type": "number" },
+        "uploaderId": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["url", "type", "size", "uploaderId", "createdAt"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "System or user notification",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "message": { "type": "string" },
+        "isRead": { "type": "boolean" },
+        "type": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["title", "message", "isRead", "createdAt"]
+    }
+  },
+  "firestore": {
+    "users/{userId}": {
+      "schema": "User",
+      "description": "Global user profiles"
+    },
+    "users/{userId}/notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "User specific notifications"
+    },
+    "teams/{teamId}": {
+      "schema": "Team",
+      "description": "Workspaces"
+    },
+    "teams/{teamId}/members/{memberId}": {
+      "schema": "TeamMember",
+      "description": "Team members"
+    },
+    "teams/{teamId}/socialAccounts/{accountId}": {
+      "schema": "SocialAccount",
+      "description": "Social accounts owned by the team"
+    },
+    "teams/{teamId}/posts/{postId}": {
+      "schema": "Post",
+      "description": "Content belonging to the team"
+    },
+    "teams/{teamId}/media/{mediaId}": {
+      "schema": "MediaFile",
+      "description": "Media uploaded by the team"
+    }
+  }
+}
